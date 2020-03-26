@@ -1,0 +1,59 @@
+
+clear all
+close all
+
+%n = datenum(d0,'HH:MM dd.mm.yyyy')
+
+
+
+%!awk '{print $1, "," $2, $3}' reyk_prs_20190101_20200101.txt > gg.txt
+%rvk_ioc = readtable('reyk_prs_20190101_20200101.txt');
+
+
+tg_fname = 'Grindavik-Measured-Seaheight.csv';
+tg_data = readtable(tg_fname,'Delimiter',';');
+dn_tg = datenum(tg_data.date,'HH:MM dd.mm.yyyy');
+wl_tg_01 = tg_data.wl01;
+wl_tg_02 = tg_data.wl02;
+
+
+delft_fname = 'waterLvlDELFT.csv'
+delft_data = readtable(delft_fname);
+dn_delft = datenum(delft_data.date);
+wl_delft = delft_data.sea_level;
+
+idd_delft = find(dn_delft>max(dn_tg),1,'first')
+%the data from the table is backwards in time. 
+
+
+figure
+
+plot(dn_tg,wl_tg_01-2.5736)
+hold on
+plot(dn_delft(1:idd_delft),wl_delft(1:)
+datetick('x','dd/mm','keepticks','keeplimits')
+grid on
+ylabel('wave height, m')
+legend('tide gauge','Delft3D')
+
+
+
+figure
+subplot(4,1,[1 2])
+plot(dn_ioc_jan(1:ioc_half),wh_ioc(1:ioc_half))
+hold on
+plot( dn_delft_jan(1:delf_half), wh_delft(1:delf_half) )
+ylabel('wave height, m')
+legend('RVK IOC','Delft3D')
+grid on
+datetick('x','dd/mm','keepticks','keeplimits')
+subplot(4,1,[3 4])
+plot(  dn_ioc_jan( ioc_half:end ),wh_ioc( ioc_half:end )  )
+hold on
+plot(dn_delft_jan( delf_half:end ),wh_delft( delf_half:end) )
+ylabel('wave height, m')
+legend('RVK IOC','Delft3D')
+grid on
+xlabel('date')
+datetick('x','dd/mm','keepticks','keeplimits')
+
